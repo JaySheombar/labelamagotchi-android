@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
+
+android {
+    compileSdk ProjectConfig.compileSdk
+
+    defaultConfig {
+        minSdk ProjectConfig.minSdk
+        targetSdk ProjectConfig.targetSdk
+        versionCode ProjectConfig.versionCode
+        versionName ProjectConfig.versionName
+
+        testInstrumentationRunner ProjectConfig.testInstrumentationRunner
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    testOptions.unitTests.all {
+        useJUnitPlatform()
+    }
+}
+
+dependencies {
+    implementation AndroidX.Core
+
+    implementation DaggerHilt.Core
+    kapt DaggerHilt.Compiler
+
+    implementation Kotlin.Serialization
+    implementation Kotlin.CoroutinesCore
+
+    testImplementation Testing.jUnitApi
+    testImplementation Testing.jUnitParams
+    testImplementation Kotlin.CoroutinesTest
+
+    testRuntimeOnly Testing.Engine
+}
